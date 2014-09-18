@@ -22,7 +22,7 @@ A nanobar.js object
 @param args.count - the expected number of events to be returned before the page is "complete"
 */
 Clizia.Nanobar = function(args) { 
-	if (typeof Nanobar !== "object") {
+	if (typeof Nanobar !== "function") {
 	       	throw "Clizia.Nanobar requires Nanobar.js";
 	}
 	var that = {};
