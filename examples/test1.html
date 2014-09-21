@@ -5,18 +5,21 @@
 <link href="../vendor/rickshaw.min.css" rel="stylesheet"/>
 <link href="../clizia.min.css" rel="stylesheet"/>
 
+	<div id="slider" class="slider"></div>
+	<div id="zoomtoselected" class="zoomtoselected"></div>
 <div class="chart_container">
 	<div id="chart" class="chart"></div>
 	<div id="yaxis" class="y_axis"></div>
 </div>
 <script>
 metric = { feed: "http://localhost:4567/source/The_Prince?", id: "feed" }
-
+slider = new Clizia.Graph.Rickshaw.Slider({element: "slider"})
 chart = new Clizia.Graph.Rickshaw.Standard({ 
 	chart: "chart", metric: metric,
 	start: 1000,
 	stop: 2000, 
 	step: 1,
+	slider: slider,
 	yaxis: "yaxis"
 	})
 
