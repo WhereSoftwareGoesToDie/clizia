@@ -29,6 +29,11 @@ Clizia.Nanobar = function(args) {
 		} 
 	}; 
 	
+	// Force the completion of the nanobar progress (e.g. unrecoverable error)
+	that.complete = function() { 
+		that.nanobar.go(100);
+	}
+
 	that.init(args);
 
 	return that; 

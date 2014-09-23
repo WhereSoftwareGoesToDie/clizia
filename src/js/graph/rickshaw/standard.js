@@ -14,6 +14,7 @@ Clizia.Graph.Rickshaw.Standard = function(args) {
 				err = data.error ||  errorMessage.noData	
 				that.state({state: "error", element: that.chart, error: err, removeURL: that.metric.removeURL})
 				if (that.slider) { that.slider.failed({graph: that.metric.id}) }
+				that.metric_complete();
 				throw "Error retrieving data: "+err
 			}
 

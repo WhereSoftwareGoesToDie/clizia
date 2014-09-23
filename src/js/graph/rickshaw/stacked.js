@@ -40,6 +40,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 				if (that.invalidData(data)) { 
 					err = data.error || "No data receieved"
 					that.state({state: "error", chart: that.chart, error: err})
+					that.metric_failed();
 					throw err
 				} 
 				dataStore[i] = {data: data, name: d }

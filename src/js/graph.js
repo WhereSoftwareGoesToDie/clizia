@@ -68,6 +68,12 @@ Clizia.Graph = function(args) {
 		} 
 	} 
 
+	that.metric_failed = function() { 
+		if (typeof nanobar === "object") {
+			nanobar.complete()
+		} 
+	} 
+
 	that.init(args);
 	return that;
 }
