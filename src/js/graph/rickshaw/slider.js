@@ -28,7 +28,7 @@ Clizia.Graph.Rickshaw.Slider = function (args) {
 
 		if (!that.graphs) { throw "Clizia.Slider cannot render if no graphs" }
 
-		if (that.length == that.graphs.length) { 
+		if (that.length == that.graphs.length && that.length >= 1) { 
 			that.slider = new Rickshaw.Graph.RangeSlider.Preview({
 				graphs: that.graphs,
 				height: that.height, 

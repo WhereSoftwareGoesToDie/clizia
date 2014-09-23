@@ -254,19 +254,21 @@ Clizia.Graph.Rickshaw = function (args) {
 			for (n = 0; n < that.metric.length; n++ ) {
 				m = that.metric[n]
 
-//				if (!m.feed) {	throw "Metric '"+m.id+"' has no feed!"	}
+				if (!m.feed) {
+					throw "Metric '"+m.id+"' has no feed!"
+				}
 
 				// Expect metric and color to either be Object, String; or [Object], [String]
 				m.color = that.color[n] || next_color(); 
 			}
 
 		} else {
-//			if (!that.metric.feed) { throw "Metric "+that.metric.id+" has no feed!" }
+			if (!that.metric.feed) { throw "Metric "+that.metric.id+" has no feed!" }
 
 			that.metric.color = args.color || next_color();
 		} 
 		
-		console.log("HI")
+
 		//TODO nicer defaults, like above, but optional?
 		that.width = args.width || defaults.width;
 		that.height = args.height || defaults.height;
@@ -281,14 +283,10 @@ Clizia.Graph.Rickshaw = function (args) {
 		args = args || {}
 		index = args.index || 0
 		if (is_array(that.metric)) {
-			if (that.metric[index].file) { return that.metric[index].file}
 			feed = args.feed || that.metric[index].feed
 		} else { 
-			if (that.metric.file) { return that.metric.file }
 			feed = args.feed || that.metric.feed
 		} 
-
-
 		start = args.start || that.start
 		stop = args.stop || that.stop
 		step = args.step || that.step
@@ -761,7 +759,7 @@ Clizia.Graph.Rickshaw.Standard = function(args) {
 		if (that.removeurl) { 
 			Clizia.Utils.removeURL(that.removeurl, that.metric.removeURL);
 		} 
-		$.get(that.feed(), function(data) { 
+		$.getJSON(that.feed(), function(data) { 
 			if (that.invalidData(data)) { 
 				err = data.error ||  errorMessage.noData	
 				that.state({state: "error", element: that.chart, error: err, removeURL: that.metric.removeURL})
@@ -861,7 +859,7 @@ Clizia.Graph.Rickshaw.Slider = function (args) {
 
 		if (!that.graphs) { throw "Clizia.Slider cannot render if no graphs" }
 
-		if (that.length == that.graphs.length) { 
+		if (that.length == that.graphs.length && that.length >= 1) { 
 			that.slider = new Rickshaw.Graph.RangeSlider.Preview({
 				graphs: that.graphs,
 				height: that.height, 

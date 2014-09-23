@@ -12,4 +12,6 @@ Example/test1.html notes
 * Adding slider breaks yaxis. If one #chart, then css could be dynamic
 * toggle legend for rickshaw
 
+
+* tooltip jquery function - required from layout?
 Possibly make the Clizia.Graph({ graph: "Rickshaw.Standard"}) instead?

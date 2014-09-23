@@ -1,30 +1,39 @@
 <script src="../vendor/jquery-1.10.2.min.js" /></script>
 <script src="../vendor/d3.v3.js" charset="utf-8" /></script>
 <script src="../vendor/rickshaw.min.js"></script>
+<script src="../vendor/bootstrap.min.js"></script>
+
 <script src="../clizia.js"></script>
 <link href="../vendor/rickshaw.min.css" rel="stylesheet"/>
-<link href="../clizia.min.css" rel="stylesheet"/>
+<link href="../vendor/font-awesome.min.css" rel="stylesheet"/>
+<link href="../clizia.css" rel="stylesheet"/>
 
+<div class="page_wrapper">
+	<div class="chart_container">
+		<div id="chart" class="chart"></div>
+		<div id="yaxis" class="y_axis"></div>
+	</div>
 	<div id="slider" class="slider"></div>
-	<div id="zoomtoselected" class="zoomtoselected"></div>
-<div class="chart_container">
-	<div id="chart" class="chart"></div>
-	<div id="yaxis" class="y_axis"></div>
+	<span id="zoomtoselected" class="zoomtoselected"></span>
 </div>
 <script>
 metric = { feed: "http://localhost:4567/source/The_Prince?", id: "feed" }
+
 slider = new Clizia.Graph.Rickshaw.Slider({element: "slider"})
+
+now = +new Date() / 1000
+
+
 chart = new Clizia.Graph.Rickshaw.Standard({ 
 	chart: "chart", metric: metric,
-	start: 1000,
-	stop: 2000, 
+	start: now - 1800,
+	stop: now, 
 	step: 1,
 	slider: slider,
 	yaxis: "yaxis"
 	})
 
 chart.render()
-
 
 
 </script>

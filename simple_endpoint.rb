@@ -19,7 +19,6 @@ end
 get '/source/:source' do
 	response['Access-Control-Allow-Origin'] = '*'
 	content_type :json
-
 	[:start, :stop, :step].each do |p|
 		return { error: "Must provide #{p}"}.to_json unless params[p]
 	end
