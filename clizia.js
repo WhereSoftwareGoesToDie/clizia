@@ -681,7 +681,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 		function rtd(side) {
 			c = [];
 
-			["&nbsp","average","deviation","bounds","&nbsp"].forEach(function(d){
+			["&nbsp","mean","std.deviation","min, max","&nbsp"].forEach(function(d){
 				c.push("<td align='right'>"+d+"</td>");
 			});
 
