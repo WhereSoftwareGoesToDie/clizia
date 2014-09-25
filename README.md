@@ -15,25 +15,28 @@ Vendor Assets
 Clizia leverages off existing opensource projects. In order to use clizia, you must include the various vendor files provided. 
 
 
-
-# Clizia.ProgressBar
+### Clizia.ProgressBar
 
 Nanobar.js - https://github.com/jacoborus/nanobar/ 
 
 
-# Clizia.Rickshaw.*
+### Clizia.Rickshaw.*
 
 Rickshaw - https://github.com/shutterstock/rickshaw
 (Custom fork: https://github.com/glasnt/rickshaw)
 
-D3 - https://github.com/mbostock/d3
 
 
-# Clizia.Horizon
+### Clizia.Horizon
 
 Cubism.js - https://github.com/square/cubism
 (Custom fork: https://github.com/glasnt/cubism
 
+### d3.js 
 
 D3 - https://github.com/mbostock/d3
 
+
+### Font Awesome
+
+http://fortawesome.github.io/Font-Awesome/
