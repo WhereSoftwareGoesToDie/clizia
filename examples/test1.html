@@ -1,23 +1,18 @@
-<script src="../vendor/jquery-1.10.2.min.js" /></script>
-<script src="../vendor/d3.v3.js" charset="utf-8" /></script>
-<script src="../vendor/rickshaw.min.js"></script>
-<script src="../vendor/bootstrap.min.js"></script>
+<script src="../vendor_bundle.js"  charset="utf-8" ></script>
+<link href="../vendor_bundle.css" rel="stylesheet"/>
 
 <script src="../clizia.js"></script>
-<link href="../vendor/rickshaw.min.css" rel="stylesheet"/>
-<link href="../vendor/font-awesome.min.css" rel="stylesheet"/>
 <link href="../clizia.css" rel="stylesheet"/>
 
 <div class="page_wrapper">
-	<div class="chart_container">
+	<div id="chart_container">
 		<div id="chart" class="chart"></div>
 		<div id="yaxis" class="y_axis"></div>
 	</div>
 	<div id="slider" class="slider"></div>
-	<span id="zoomtoselected" class="zoomtoselected"></span>
 </div>
 <script>
-metric = { feed: "http://localhost:4567/source/The_Prince?", id: "feed" }
+metric = { feed: "http://localhost:4567/source/The_Prince?", metadata: {}, id: "feed" }
 
 slider = new Clizia.Graph.Rickshaw.Slider({element: "slider"})
 

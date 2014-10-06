@@ -21,9 +21,23 @@ JS_FILES=\
 	src/js/graph/rickshaw/standard.js\
 	src/js/graph/rickshaw/slider.js
 
+VENDOR_JS_FILES=\
+	vendor/jquery-1.10.2.min.js\
+	vendor/d3.v3.js\
+	vendor/d3.layout.min.js\
+	vendor/rickshaw.min.js\
+	vendor/bootstrap.min.js\
+	vendor/nanobar.js\
+	vendor/cubism.v1.js
+
+
+VENDOR_CSS_FILES=\
+	vendor/rickshaw.min.css\
+	vendor/font-awesome.relative.min.css
+
 .PHONY: clean build
 
-build: clizia.min.css clizia.min.js
+build: vendor_bundle.js vendor_bundle.css clizia.min.css clizia.min.js
 
 clean:
 	rm -rf clizia.css clizia.js clizia.min.*
@@ -45,6 +59,13 @@ $(NODEUNIT):
 
 clizia.css: $(CSS_FILES)
 	cat $(CSS_FILES) > clizia.css
+
+vendor_bundle.css: $(VENDOR_CSS_FILES)
+	cat $(VENDOR_CSS_FILES) > vendor_bundle.css
+
+vendor_bundle.js: $(VENDOR_JS_FILES)
+	cat $(VENDOR_JS_FILES) > vendor_bundle.js
+
 
 #clizia.js: $(JS_FILES)	$(JS_HINT)
 clizia.js: $(JS_FILES)
