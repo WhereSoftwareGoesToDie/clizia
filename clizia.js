@@ -56,6 +56,7 @@ Clizia.Nanobar = function(args) {
 	return that; 
 }; 
 
+var clizia_utils_unique_id_seed = 0;
 Clizia.Utils = {
 	showURL: function(element, url) { 
 		var show = "<span class='data_source'><a href='"+
@@ -72,12 +73,25 @@ Clizia.Utils = {
 	},
 	ProgressBar: function(a) { 
 		nanobar = Clizia.Nanobar({count: a});
-	}
+	},
+
+	uniq_id: function(a) { 
+		//unique, not a GUID, but unique enough
+		if (typeof a === "undefined") { 
+			div_name = "id_" 
+		} else { 
+			div_name = a + "_" 
+		}
+		return div_name + (++clizia_utils_unique_id_seed) 
+	} 
+
 };
 Clizia.Graph = function(args) {
         var that = {};
 
         that.init = function(args) {
+		if (!args) throw "Clizia.Graph requires at least some settings. You have provided none."
+
                 if (!args.chart) throw "Clizia.Graph needs a chart";
                 that.chart = args.chart;
 
@@ -250,19 +264,20 @@ Clizia.Graph.Rickshaw = function (args) {
 		container = $("#"+that.chart)
 		container.addClass("chart_container")
 
-		container.append("<div id='y_axis' class='y_axis'></div>")
-		that.yaxis = "y_axis"
+		that.yaxis = Clizia.Utils.uniq_id("y_axis")
+		container.append("<div id='"+that.yaxis+"' class='y_axis'></div>")
 
-		container.append("<div id='graph' class='chart'></div>")
-		that.graph = "graph"
-
+		that.graph = Clizia.Utils.uniq_id("graph")
+		container.append("<div id='"+that.graph+"' class='chart'></div>")
 
 		that.y2axis = args.y2axis
 
-		if (args.slider) { that.slider = args.slider } 
+		if (args.slider) { 
+			that.slider = args.slider 
+			$("#"+that.slider.element).addClass("slider")
+		} 
 		else { that.noSlider = true }
 		
-		$("#"+that.slider.element).addClass("slider")
 
 		if (args.dynamic) { that.dynamic = args.dynamic }
 		if (args.showurl) { that.showurl = args.showurl}
@@ -563,7 +578,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 		}
 
 		graph = new Rickshaw.Graph({
-			element: document.getElementById(that.rickshaw_chart),
+			element: document.getElementById(that.graph),
 			width: that.width, 
 			height: that.height, 
 			series: series
@@ -611,12 +626,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 		}
 
 		// X-axis slider for zooming
-		slider = new Rickshaw.Graph.RangeSlider.Preview({
-			graph: graph,
-			height: 30,
-			element: $('#slider')[0],
-			onChangeDo: that.generateLegend
-		});
+		if (that.slider) { that.slider.render({graphs: graph, onchange: that.generateLegend})}
 
 		var hoverDetail = new Rickshaw.Graph.HoverDetail( {
 			graph: graph,
@@ -637,7 +647,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 	}
 
 	that.generateLegend = function() {
-		if (!that.disableLegend) { 
+		if (that.legend) { 
 		
 		var legend = document.getElementById(that.legend);
 
@@ -670,7 +680,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 		for (var i = 0; i < graph.series.length; i++) { 
 			d = graph.series[i];
 			obj = {};
-			obj.metric = that.metric[i].title;
+			obj.metric = that.metric[i].title || that.metric[i].id;
 			obj.colour = d.color;
 
 			obj.ydata = visibleData(d.data);

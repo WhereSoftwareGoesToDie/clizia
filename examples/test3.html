@@ -14,26 +14,31 @@
 
 <div style="padding: 100px">
 	<div id="chart"></div>
-	<div id="slider"></div>
+</div>
+
+<div style="padding: 100px">
+	<div id="chart2"></div>
 </div>
 
 
 <script>
 metric = { feed: "http://localhost:4567/source/The_Prince?", metadata: {}, id: "feed" }
 
-slider = new Clizia.Graph.Rickshaw.Slider({element: "slider"})
-
 now = +new Date() / 1000
 
-tchart = new Clizia.Graph.Rickshaw.Standard({ 
-	chart: "chart",
+settings = {
 	metric: metric,
 	start: now - 1800,
 	stop: now, 
-	step: 1,
-	dynamic: true,
-	})
+	step: 1
+}
 
-tchart.render()
+function merge(a,b) { return $.extend({}, a, b)}
+
+chart = new Clizia.Graph.Rickshaw.Standard(merge({chart: "chart"}, settings))
+chart.render()
+
+chart2 = new Clizia.Graph.Rickshaw.Standard(merge({chart: "chart2"}, settings)) 
+chart2.render()
 
 </script>

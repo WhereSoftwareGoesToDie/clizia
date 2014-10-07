@@ -39,6 +39,7 @@ Clizia.Nanobar = function(args) {
 	return that; 
 }; 
 
+var clizia_utils_unique_id_seed = 0;
 Clizia.Utils = {
 	showURL: function(element, url) { 
 		var show = "<span class='data_source'><a href='"+
@@ -55,5 +56,16 @@ Clizia.Utils = {
 	},
 	ProgressBar: function(a) { 
 		nanobar = Clizia.Nanobar({count: a});
-	}
+	},
+
+	uniq_id: function(a) { 
+		//unique, not a GUID, but unique enough
+		if (typeof a === "undefined") { 
+			div_name = "id_" 
+		} else { 
+			div_name = a + "_" 
+		}
+		return div_name + (++clizia_utils_unique_id_seed) 
+	} 
+
 };

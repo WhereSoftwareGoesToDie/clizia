@@ -2,6 +2,8 @@ Clizia.Graph = function(args) {
         var that = {};
 
         that.init = function(args) {
+		if (!args) throw "Clizia.Graph requires at least some settings. You have provided none."
+
                 if (!args.chart) throw "Clizia.Graph needs a chart";
                 that.chart = args.chart;
 
