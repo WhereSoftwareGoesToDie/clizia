@@ -235,7 +235,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 		for (var i = 0; i < graph.series.length; i++) { 
 			d = graph.series[i];
 			obj = {};
-			obj.metric = that.metric[i].title;
+			obj.metric = that.metric[i].title || that.metric[i].id;
 			obj.colour = d.color;
 
 			obj.ydata = visibleData(d.data);
