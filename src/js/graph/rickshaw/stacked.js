@@ -202,7 +202,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 	}
 
 	that.generateLegend = function() {
-		if (!that.disableLegend) { 
+		if (that.legend) { 
 		
 		var legend = document.getElementById(that.legend);
 
