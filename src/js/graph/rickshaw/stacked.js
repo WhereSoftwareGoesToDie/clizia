@@ -133,7 +133,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 		}
 
 		graph = new Rickshaw.Graph({
-			element: document.getElementById(that.chart),
+			element: document.getElementById(that.rickshaw_chart),
 			width: that.width, 
 			height: that.height, 
 			series: series

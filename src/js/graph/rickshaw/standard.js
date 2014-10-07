@@ -19,7 +19,7 @@ Clizia.Graph.Rickshaw.Standard = function(args) {
 			}
 
 			graph = new Rickshaw.Graph({
-				element: document.getElementById(that.chart),
+				element: document.getElementById(that.graph),
 				width: that.width, 
 				height: that.height,
 				renderer: 'line', 
@@ -29,6 +29,8 @@ Clizia.Graph.Rickshaw.Standard = function(args) {
 			that.graph = graph;
 			extent = that.extents(data);
 			pextent = {min: extent[0] - that.padding, max: extent[1] + that.padding}
+			
+			
 
 			if (that.zeromin) { pextent.min = 0 }
 

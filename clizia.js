@@ -247,14 +247,24 @@ Clizia.Graph.Rickshaw = function (args) {
 		if (!args.step)  throw "Clizia.Graph.Rickshaw needs a step interval"
 		that.step = args.step
 
-		if (!args.yaxis) throw "I should have a yaxis"
-		that.yaxis = args.yaxis	
+		container = $("#"+that.chart)
+		container.addClass("chart_container")
+
+		container.append("<div id='y_axis' class='y_axis'></div>")
+		that.yaxis = "y_axis"
+
+		container.append("<div id='graph' class='chart'></div>")
+		that.graph = "graph"
+
 
 		that.y2axis = args.y2axis
 
 		if (args.slider) { that.slider = args.slider } 
 		else { that.noSlider = true }
+		
+		$("#"+that.slider.element).addClass("slider")
 
+		if (args.dynamic) { that.dynamic = args.dynamic }
 		if (args.showurl) { that.showurl = args.showurl}
 		if (args.removeurl) { that.removeurl = args.removeurl}
 		if (args.zeromin) { that.zeromin = args.zeromin }
@@ -383,9 +393,11 @@ Clizia.Graph.Rickshaw = function (args) {
 		}
 	} 
 
-	that.dynamicWidth = function() { 
-		that.fitToWindow()
-		$(window).on('resize', function(){ that.fitToWindow(); })
+	that.dynamicWidth = function() {
+		if (that.dynamic) { 
+			that.fitToWindow()
+			$(window).on('resize', function(){ that.fitToWindow(); })
+		}
 	} 
 
 	that.zoomtoselected = function(_base, _start, _stop) { 
@@ -551,7 +563,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 		}
 
 		graph = new Rickshaw.Graph({
-			element: document.getElementById(that.chart),
+			element: document.getElementById(that.rickshaw_chart),
 			width: that.width, 
 			height: that.height, 
 			series: series
@@ -787,7 +799,7 @@ Clizia.Graph.Rickshaw.Standard = function(args) {
 			}
 
 			graph = new Rickshaw.Graph({
-				element: document.getElementById(that.chart),
+				element: document.getElementById(that.graph),
 				width: that.width, 
 				height: that.height,
 				renderer: 'line', 
@@ -797,6 +809,8 @@ Clizia.Graph.Rickshaw.Standard = function(args) {
 			that.graph = graph;
 			extent = that.extents(data);
 			pextent = {min: extent[0] - that.padding, max: extent[1] + that.padding}
+			
+			
 
 			if (that.zeromin) { pextent.min = 0 }
 
