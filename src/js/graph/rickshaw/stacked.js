@@ -181,12 +181,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 		}
 
 		// X-axis slider for zooming
-		slider = new Rickshaw.Graph.RangeSlider.Preview({
-			graph: graph,
-			height: 30,
-			element: $('#slider')[0],
-			onChangeDo: that.generateLegend
-		});
+		if (that.slider) { that.slider.render({graphs: graph, onchange: that.generateLegend})}
 
 		var hoverDetail = new Rickshaw.Graph.HoverDetail( {
 			graph: graph,
