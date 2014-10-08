@@ -2,6 +2,8 @@ Clizia.Graph = function(args) {
         var that = {};
 
         that.init = function(args) {
+		if (!args) throw "Clizia.Graph requires at least some settings. You have provided none."
+
                 if (!args.chart) throw "Clizia.Graph needs a chart";
                 that.chart = args.chart;
 
@@ -23,12 +25,12 @@ Clizia.Graph = function(args) {
 	that.state = function(args) {          
 		if (typeof args === "String" ) { args = {state: args} }
 
-		function rmv_wait() { chart.find(".waiting").remove() }
+		function rmv_wait() { graph.find(".waiting").remove() }
 
 		if (args.state) { 
-			chart = $("#"+that.chart)
+			var graph = $("#"+that.chart)
 			if (args.state === "waiting") { 
-				chart.append("<div class='waiting'><i class='icon-spin'></i></div>")
+				graph.append("<div class='waiting'><i class='icon-spin'></i></div>")
 			} else if (args.state === "error") {
 				rmv_wait()
 
@@ -50,9 +52,9 @@ Clizia.Graph = function(args) {
 						"</div>";
 				}
 				error_alert += "</div>";
-				chart.append(error_alert)
+				graph.append(error_alert)
 
-				chart.addClass("error")
+				graph.addClass("error")
 			} else if (args.state === "complete") { 
 				rmv_wait()
 			} 

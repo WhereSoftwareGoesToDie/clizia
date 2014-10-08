@@ -28,12 +28,15 @@ Clizia.Graph.Rickshaw.Slider = function (args) {
 
 		if (!that.graphs) { throw "Clizia.Slider cannot render if no graphs" }
 
-		if (that.length == that.graphs.length && that.length >= 1) { 
-			that.slider = new Rickshaw.Graph.RangeSlider.Preview({
+		if (that.length == that.graphs.length && that.length >= 1) {
+			settings = {
 				graphs: that.graphs,
 				height: that.height, 
 				element: document.getElementById(that.element)
-			})
+			}
+			if (args) { if (args.onchange) { settings.onChangeDo = args.onchange }}
+			that.slider = new Rickshaw.Graph.RangeSlider.Preview(settings)
+
 			that.slider.render()
 		}
 	}

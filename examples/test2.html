@@ -7,6 +7,7 @@
 <script src="../src/js/utils.js"></script> 
 <script src="../src/js/graph/rickshaw.js"></script>
 <script src="../src/js/graph/rickshaw/standard.js"></script>
+<script src="../src/js/graph/rickshaw/stacked.js"></script>
 <script src="../src/js/graph/rickshaw/slider.js"></script>
 
 <link href="../src/css/clizia.css" rel="stylesheet"/>
@@ -15,25 +16,27 @@
 <div style="padding: 100px">
 	<div id="chart"></div>
 	<div id="slider"></div>
+	<div id="legend"></div>
 </div>
 
-
 <script>
-metric = { feed: "http://localhost:4567/source/The_Prince?", metadata: {}, id: "feed" }
+metric_a = { feed: "http://localhost:4567/source/The_Prince?", metadata: {}, id: "feed" }
+metric_b = { feed: "http://localhost:4567/source/The_Mandrake?", metadata: {}, id: "feed" }
 
 slider = new Clizia.Graph.Rickshaw.Slider({element: "slider"})
 
 now = +new Date() / 1000
 
-tchart = new Clizia.Graph.Rickshaw.Standard({ 
+chart = new Clizia.Graph.Rickshaw.Stacked({ 
 	chart: "chart",
-	metric: metric,
+	metric: [metric_a, metric_b],
 	start: now - 1800,
 	stop: now, 
 	step: 1,
-	dynamic: true,
+	slider: slider,
+	legend: "legend"
 	})
 
-tchart.render()
+chart.render()
 
 </script>
