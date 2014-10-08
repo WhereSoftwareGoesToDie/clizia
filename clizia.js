@@ -913,13 +913,10 @@ Clizia.Graph.Rickshaw.Slider = function (args) {
 				height: that.height, 
 				element: document.getElementById(that.element)
 			}
-			if (args.onchange) { settings.onChangeDo = args.onchange }
+			if (args) { if (args.onchange) { settings.onChangeDo = args.onchange }}
 			that.slider = new Rickshaw.Graph.RangeSlider.Preview(settings)
 
 			that.slider.render()
-		}
-		if (args.onchange) { 
-			args.onchange()
 		}
 	}
 
