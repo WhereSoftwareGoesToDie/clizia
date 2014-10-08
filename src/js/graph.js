@@ -28,7 +28,7 @@ Clizia.Graph = function(args) {
 		function rmv_wait() { graph.find(".waiting").remove() }
 
 		if (args.state) { 
-			graph = $("#"+that.chart)
+			var graph = $("#"+that.chart)
 			if (args.state === "waiting") { 
 				graph.append("<div class='waiting'><i class='icon-spin'></i></div>")
 			} else if (args.state === "error") {
