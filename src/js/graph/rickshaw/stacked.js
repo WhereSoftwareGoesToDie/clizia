@@ -127,10 +127,6 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 
 		config.padding = padArray
 
-		// ...
-		if (that.flag === "xkcd") {
-			config.interpolate = "xkcd";
-		}
 
 		graph = new Rickshaw.Graph({
 			element: document.getElementById(that.graph),
