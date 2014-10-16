@@ -28,7 +28,8 @@ VENDOR_JS_FILES=\
 	vendor/rickshaw.min.js\
 	vendor/bootstrap.min.js\
 	vendor/nanobar.js\
-	vendor/cubism.v1.js
+	vendor/cubism.v1.js\
+	vendor/cubism.css
 
 
 VENDOR_CSS_FILES=\

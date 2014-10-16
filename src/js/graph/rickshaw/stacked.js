@@ -136,6 +136,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 		})
 
 		graph.configure(config);
+
 		that.graph = graph;
 
 		if (that.hasLeft) { 

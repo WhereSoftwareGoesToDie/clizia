@@ -9909,8 +9909,8 @@ cubism_contextPrototype.machiavelli= function(host) {
 	      + "&step="+ step/1000
 	d3.json(feed
           , function(data) {
-          if (!data || data.length == 0) return callback(new Error("error loading data - no data returned"));
-          if (data.error) return callback(new Error("machiavelli error: "+data.error));
+          if (!data || data.length == 0) return callback(machiavelli_error(target,"error loading data - no data returned"));
+          if (data.error) return callback(machiavelli_error(target,data.error));
           callback(postEffect(), data.map(function(d) { return d.y} ))
       });
     }, metricName);
@@ -9926,6 +9926,13 @@ cubism_contextPrototype.machiavelli= function(host) {
 
 function cubism_machiavelliFormatDate(time) {                                                                                                                                        
   return Math.floor(time / 1000);
+}
+
+function machiavelli_error(target,msg) {
+        var t = $.grep(chart.metric, function(i,d){ return i.id == target})[0].title //this wont work outside clizia
+        $("span:contains('"+t+"')").filter(".title").append(" -- "+msg);
+	if (typeof chart == "object") { chart.metric_failed() }
+	return  new Error(msg);
 }
 cubism_contextPrototype.gangliaWeb = function(config) {
   var host = '',
@@ -10672,9 +10679,9 @@ cubism_contextPrototype.axis = function() {
       axis_ = d3.svg.axis().scale(scale);
 
   d = d3.time.format
-  if (context.utcTime()) { 
-  	d = d3.time.format.utc; 
-  } 
+  if (context.utcTime()) {
+      d = d3.time.format.utc;
+  }
 
   var cubism_axisFormatSeconds = d("%H:%M:%S"),
       cubism_axisFormatMinutes = d("%H:%M"),
@@ -10744,8 +10751,6 @@ cubism_contextPrototype.axis = function() {
       "tickPadding",
       "tickFormat");
 };
-
-
 cubism_contextPrototype.rule = function() {
   var context = this,
       metric = cubism_identity;
@@ -10824,3 +10829,62 @@ function cubism_ruleLeft(i) {
   return i + "px";
 }
 })(this);
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis text {
+  -webkit-transition: fill-opacity 250ms linear;
+}
+
+.axis path {
+  display: none;
+}
+
+.axis line {
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.horizon {
+  border-bottom: solid 1px #000;
+  overflow: hidden;
+  position: relative;
+}
+
+.horizon {
+  border-top: solid 1px #000;
+  border-bottom: solid 1px #000;
+}
+
+.horizon + .horizon {
+  border-top: none;
+}
+
+.horizon canvas {
+  display: block;
+}
+
+.horizon .title,
+.horizon .value {
+  bottom: 0;
+  line-height: 30px;
+  margin: 0 6px;
+  position: absolute;
+  text-shadow: 0 1px 0 rgba(255,255,255,.5);
+  white-space: nowrap;
+}
+
+.horizon .title {
+  left: 0;
+}
+
+.horizon .value {
+  right: 0;
+}
+
+.line {
+  background: #000;
+  opacity: .2;
+  z-index: 2;
+}

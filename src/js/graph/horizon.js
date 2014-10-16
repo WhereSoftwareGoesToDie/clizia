@@ -28,8 +28,7 @@ Clizia.Graph.Horizon = function(args) {
 		that.context = context;	
 	}
 
-	that.render = function() { 
-		initProgress();
+	that.render = function() {
 		context = that.context
 
 		if (that.clock == "utc") { context.utcTime(true);}
@@ -41,10 +40,8 @@ Clizia.Graph.Horizon = function(args) {
 			m = that.metric[n]
 			id = m.id;
 			title = m.title || m.id
-			datum.push(machiavelli.metric(id,title, updateProgress));
+			datum.push(machiavelli.metric(id,title, that.metric_complete))
 		}
-
-		$(document).ajaxComplete(doneProgress);
 
 		d3.select(that.chart).call(function(div) {
 			div.append("div")
@@ -70,7 +67,6 @@ Clizia.Graph.Horizon = function(args) {
 			d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
 		});	
 	} 
-
 
 	that.init(args)
 	return that
