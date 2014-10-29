@@ -7,15 +7,6 @@ Clizia.Graph.Rickshaw = function (args) {
 
 	that.init = function(args) { 
 		//TODO arg handler? args key then error if 404 then assignment?
-		if (!args.start) throw "Clizia.Graph.Rickshaw needs a start time"
-		that.start = args.start
-
-		if (!args.stop)  throw "Clizia.Graph.Rickshaw needs a stop time"
-		that.stop = args.stop
-
-		if (!args.step)  throw "Clizia.Graph.Rickshaw needs a step interval"
-		that.step = args.step
-
 		container = $("#"+that.chart)
 		container.addClass("chart_container")
 
@@ -23,6 +14,7 @@ Clizia.Graph.Rickshaw = function (args) {
 		container.append("<div id='"+that.yaxis+"' class='y_axis'></div>")
 
 		that.graph = Clizia.Utils.uniq_id("graph")
+		that.graph_id = that.graph
 		container.append("<div id='"+that.graph+"' class='chart'></div>")
 
 		that.y2axis = args.y2axis
@@ -45,8 +37,8 @@ Clizia.Graph.Rickshaw = function (args) {
 			for (n = 0; n < that.metric.length; n++ ) {
 				m = that.metric[n]
 				m.metadata = m.metadata || {}
-				if (!m.feed) {
-					throw "Metric '"+m.id+"' has no feed!"
+				if (!m.feed && !m.data) {
+					throw "Metric '"+m.id+"' has no data or feed!"
 				}
 
 				// Expect metric and color to either be Object, String; or [Object], [String]
@@ -56,7 +48,7 @@ Clizia.Graph.Rickshaw = function (args) {
 		} else {
 			that.metric.metadata = that.metric.metadata || {}
 
-			if (!that.metric.feed) { throw "Metric "+that.metric.id+" has no feed!" }
+			if (!that.metric.feed && !that.metric.data) { throw "Metric "+that.metric.id+" has no data or feed!" }
 			that.metric.color = that.metric.metadata.color || args.color || next_color();
 		} 
 		
@@ -70,21 +62,6 @@ Clizia.Graph.Rickshaw = function (args) {
 
 		that.state({state: "waiting"})
 	} 
-
-	that.feed = function(args) { 
-		args = args || {}
-		index = args.index || 0
-		if (is_array(that.metric)) {
-			feed = args.feed || that.metric[index].feed
-		} else { 
-			feed = args.feed || that.metric.feed
-		} 
-		start = args.start || that.start
-		stop = args.stop || that.stop
-		step = args.step || that.step
-		
-		return feed + "&start=" + start + "&stop=" + stop + "&step=" + step;
-	}
 
 	that.invalidData = function(data) { 
 		if (data.error) { return true } 
@@ -107,26 +84,34 @@ Clizia.Graph.Rickshaw = function (args) {
 		return [min, max]
 	} 
 
-	that.update = function() {  
-		now = parseInt(Date.now() / 1000, 10)
-		span = (that.stop - that.start)
-
+	that.update = function(args) {  
+				
 		if (is_array(that.metric)) { 
 			$.each(that.metric, function(n, m) { 
-				newfeed = that.feed({index: n, start: now - span, stop: now})
-				$.getJSON(newfeed, function(data) { 
-					if (that.invalidData(data)) { throw "Invalid Data, cannot render update" }
-					that.graph.series[n].data = data
-					that.graph.render();
-				})	
+				if (m.data) {  
+					that.graph.series[n].data = m.data
+                                        that.graph.render();
+				} else { 
+					newfeed = m.feed
+					$.getJSON(newfeed, function(data) { 
+						if (that.invalidData(data)) { throw "Invalid Data, cannot render update" }
+						that.graph.series[n].data = data
+						that.graph.render();
+					})
+				}	
 			})
 		} else {
-			newfeed = that.feed({start: now - span, stop: now})
-			$.getJSON(newfeed, function(data) {
-				 if (that.invalidData(data)) { throw "Invalid Data, cannot render update" }
-				 that.graph.series[0].data = data
-				 that.graph.render();
-			 })
+			if (that.data) {
+				that.graph.series[0].data = data
+				that.graph.render();
+			} else { 
+				newfeed = that.metric.feed
+				$.getJSON(newfeed, function(data) {
+					 if (that.invalidData(data)) { throw "Invalid Data, cannot render update" }
+					 that.graph.series[0].data = data
+					 that.graph.render();
+				 })
+			}
 		}
 	}
 

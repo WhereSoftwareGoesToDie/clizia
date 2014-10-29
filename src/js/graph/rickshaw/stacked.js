@@ -38,17 +38,22 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 	dataStore = []
 	
 	that.render = function(args) {
-		$.each(that.metric, function(i,d) { 
-			$.getJSON(that.feed({index: i}), function(data) { 
-				if (that.invalidData(data)) { 
-					err = data.error || "No data receieved"
-					that.state({state: "error", chart: that.chart, error: err})
-					that.metric_failed();
-					throw err
-				} 
-				dataStore[i] = {data: data, name: d }
-				flagComplete();
-			}) 
+		$.each(that.metric, function(i,d) {
+			if (that.data) { 
+				dataStore[i] = {data: data, name: d }; flagComplete()
+			} else { 
+				feed = that.metric[i].feed 
+				$.getJSON(feed, function(data) { 
+					if (that.invalidData(data)) { 
+						err = data.error || "No data receieved"
+						that.state({state: "error", chart: that.chart, error: err})
+						that.metric_failed();
+						throw err
+					} 
+					dataStore[i] = {data: data, name: d }
+					flagComplete();
+				}) 
+			}
 		})
 			
 	}
