@@ -39,8 +39,8 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 	
 	that.render = function(args) {
 		$.each(that.metric, function(i,d) {
-			if (that.data) { 
-				dataStore[i] = {data: data, name: d }; flagComplete()
+			if (d.data) { 
+				dataStore[i] = {data: d.data, name: d.title || d.id }; flagComplete()
 			} else { 
 				feed = that.metric[i].feed 
 				$.getJSON(feed, function(data) { 

@@ -86,26 +86,25 @@ Clizia.Graph.Rickshaw = function (args) {
 
 	that.update = function(args) {  
 				
-		if (is_array(that.metric)) { 
-			$.each(that.metric, function(n, m) { 
+		if (is_array(args.metric)) { 
+			$.each(args.metric, function(n, m) { 
 				if (m.data) {  
 					that.graph.series[n].data = m.data
-                                        that.graph.render();
 				} else { 
 					newfeed = m.feed
 					$.getJSON(newfeed, function(data) { 
 						if (that.invalidData(data)) { throw "Invalid Data, cannot render update" }
 						that.graph.series[n].data = data
-						that.graph.render();
 					})
 				}	
 			})
+			that.graph.render();
 		} else {
-			if (that.data) {
-				that.graph.series[0].data = data
+			if (args.data) {
+				that.graph.series[0].data = args.data
 				that.graph.render();
 			} else { 
-				newfeed = that.metric.feed
+				newfeed = args.metric.feed
 				$.getJSON(newfeed, function(data) {
 					 if (that.invalidData(data)) { throw "Invalid Data, cannot render update" }
 					 that.graph.series[0].data = data

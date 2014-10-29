@@ -17,30 +17,20 @@
 	<div id="slider"></div>
 </div>
 
-<button onClick="javascript:update_chart()">Update Chart</button>
-
 
 <script>
 
-function feed() { 
-	now = +new Date() / 1000
-	start = now - 1800
-	return "http://localhost:4567/source/The_Prince?start="+start+"&stop="+now+"&step=1"
-} 
-metric = { feed: feed(), id: "feed" }
+data = [ {x: 1, y: 100}, {x: 2, y: 75}, {x: 3, y: 120}, {x: 4, y:100}] 
+
+metric = { id: "feed", data: data }
 
 slider = new Clizia.Graph.Rickshaw.Slider({element: "slider"})
 
 tchart = new Clizia.Graph.Rickshaw.Standard({ 
 	chart: "chart",
 	metric: metric,
-	dynamic: true,
 	})
 
 tchart.render()
 
-
-function update_chart() { 
-	tchart.update({metric: { feed: feed() }})
-} 
 </script>

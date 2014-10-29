@@ -329,26 +329,25 @@ Clizia.Graph.Rickshaw = function (args) {
 
 	that.update = function(args) {  
 				
-		if (is_array(that.metric)) { 
-			$.each(that.metric, function(n, m) { 
+		if (is_array(args.metric)) { 
+			$.each(args.metric, function(n, m) { 
 				if (m.data) {  
 					that.graph.series[n].data = m.data
-                                        that.graph.render();
 				} else { 
 					newfeed = m.feed
 					$.getJSON(newfeed, function(data) { 
 						if (that.invalidData(data)) { throw "Invalid Data, cannot render update" }
 						that.graph.series[n].data = data
-						that.graph.render();
 					})
 				}	
 			})
+			that.graph.render();
 		} else {
-			if (that.data) {
-				that.graph.series[0].data = data
+			if (args.data) {
+				that.graph.series[0].data = args.data
 				that.graph.render();
 			} else { 
-				newfeed = that.metric.feed
+				newfeed = args.metric.feed
 				$.getJSON(newfeed, function(data) {
 					 if (that.invalidData(data)) { throw "Invalid Data, cannot render update" }
 					 that.graph.series[0].data = data
@@ -469,8 +468,8 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 	
 	that.render = function(args) {
 		$.each(that.metric, function(i,d) {
-			if (that.data) { 
-				dataStore[i] = {data: data, name: d }; flagComplete()
+			if (d.data) { 
+				dataStore[i] = {data: d.data, name: d.title || d.id }; flagComplete()
 			} else { 
 				feed = that.metric[i].feed 
 				$.getJSON(feed, function(data) { 
@@ -814,8 +813,8 @@ Clizia.Graph.Rickshaw.Standard = function(args) {
 				that.process(data)
 
 			})
-		} else if (that.data) { 
-			that.process(data)
+		} else if (that.metric.data) { 
+			that.process(that.metric.data)
 		}
 	}
 		

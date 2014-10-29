@@ -24,8 +24,8 @@ Clizia.Graph.Rickshaw.Standard = function(args) {
 				that.process(data)
 
 			})
-		} else if (that.data) { 
-			that.process(data)
+		} else if (that.metric.data) { 
+			that.process(that.metric.data)
 		}
 	}
 		
