@@ -14,33 +14,22 @@
 
 <div style="padding: 100px">
 	<div id="chart"></div>
-	<div id="slider"></div>
 </div>
 
-<button onClick="javascript:update_chart()">Update Chart</button>
+<div style="padding: 100px">
+	<div id="chart2"></div>
+</div>
 
 
 <script>
 
-function feed() { 
-	now = +new Date() / 1000
-	start = now - 1800
-	return "http://localhost:4567/source/The_Prince?start="+start+"&stop="+now+"&step=1"
-} 
-metric = { feed: feed(), id: "feed" }
+data1 =  [ {x: 1, y: 100}, {x: 2, y: 75}, {x: 3, y: 120}, {x: 4, y:100}] 
+data2 =  [ {x: 1, y: 110}, {x: 2, y: 70}, {x: 3, y: 110}, {x: 4, y: 00}] 
 
-slider = new Clizia.Graph.Rickshaw.Slider({element: "slider"})
+chart = new Clizia.Graph.Rickshaw.Standard({chart: "chart", metric: { id: "chart1", data: data1}})
+chart.render()
 
-tchart = new Clizia.Graph.Rickshaw.Standard({ 
-	chart: "chart",
-	metric: metric,
-	dynamic: true,
-	})
+chart2 = new Clizia.Graph.Rickshaw.Standard({chart: "chart2", metric: {id: "chart2", data: data2}}) 
+chart2.render()
 
-tchart.render()
-
-
-function update_chart() { 
-	tchart.update({metric: { feed: feed() }})
-} 
 </script>

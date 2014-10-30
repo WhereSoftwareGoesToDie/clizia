@@ -28,20 +28,20 @@ VENDOR_JS_FILES=\
 	vendor/rickshaw.min.js\
 	vendor/bootstrap.min.js\
 	vendor/nanobar.js\
-	vendor/cubism.v1.js\
-	vendor/cubism.css
+	vendor/cubism.v1.js
 
 
 VENDOR_CSS_FILES=\
 	vendor/rickshaw.min.css\
-	vendor/font-awesome.relative.min.css
+	vendor/font-awesome.relative.min.css\
+	vendor/cubism.css
 
 .PHONY: clean build
 
-build: vendor_bundle.js vendor_bundle.css clizia.min.css clizia.min.js
+build: vendor_bundle.js vendor_bundle.css clizia.min.css clizia.min.js 
 
 clean:
-	rm -rf clizia.css clizia.js clizia.min.*
+	rm -rf clizia.css clizia.js clizia.min.* vendor_bundle.*
 
 #$(JS_HINT):
 #	npm install jshint

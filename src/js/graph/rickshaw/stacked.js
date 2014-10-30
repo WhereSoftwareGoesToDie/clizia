@@ -38,20 +38,26 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 	dataStore = []
 	
 	that.render = function(args) {
-		$.each(that.metric, function(i,d) { 
-			$.getJSON(that.feed({index: i}), function(data) { 
-				if (that.invalidData(data)) { 
-					err = data.error || "No data receieved"
-					that.state({state: "error", chart: that.chart, error: err})
-					that.metric_failed();
-					throw err
-				} 
-				dataStore[i] = {data: data, name: d }
-				flagComplete();
-			}) 
+		$.each(that.metric, function(i,d) {
+			if (d.data) { 
+				dataStore[i] = {data: d.data, name: d.title || d.id }; flagComplete()
+			} else { 
+				feed = that.metric[i].feed 
+				$.getJSON(feed, function(data) { 
+					if (that.invalidData(data)) { 
+						err = data.error || "No data received"
+						that.state({state: "error", chart: that.chart, error: err})
+						that.metric_failed()
+						throw err
+					} 
+					dataStore[i] = {data: data, name: d }
+					flagComplete()
+				}) 
+			}
 		})
 			
 	}
+
 	completeCount = 0;
 	flagComplete = function(args) {
 		that.metric_complete()
@@ -60,7 +66,6 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 			completeRender()
 		} 
 	}
-		
 
 	completeRender = function() {
 
