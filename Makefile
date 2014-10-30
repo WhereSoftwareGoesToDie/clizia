@@ -9,6 +9,7 @@ CSS_FILES=\
 	src/css/clizia.css\
 	src/css/stacked.css\
 	src/css/standard.css\
+	src/css/tealeaves.css\
 	src/css/horizon.css
 
 JS_FILES=\
@@ -19,7 +20,8 @@ JS_FILES=\
 	src/js/graph/rickshaw.js\
 	src/js/graph/rickshaw/stacked.js\
 	src/js/graph/rickshaw/standard.js\
-	src/js/graph/rickshaw/slider.js
+	src/js/graph/rickshaw/slider.js\
+	src/js/graph/rickshaw/tealeaves.js
 
 VENDOR_JS_FILES=\
 	vendor/jquery-1.10.2.min.js\

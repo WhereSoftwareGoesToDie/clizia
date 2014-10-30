@@ -1,0 +1,53 @@
+<script src="../vendor_bundle.js"  charset="utf-8" ></script>
+<link href="../vendor_bundle.css" rel="stylesheet"/>
+
+<!-- script src="../clizia.js"></script-->
+<script src="../src/js/clizia.js"></script> 
+<script src="../src/js/graph.js"></script> 
+<script src="../src/js/utils.js"></script> 
+<script src="../src/js/graph/rickshaw.js"></script>
+<script src="../src/js/graph/rickshaw/tealeaves.js"></script>
+<script src="../src/js/graph/rickshaw/slider.js"></script>
+
+<link href="../src/css/clizia.css" rel="stylesheet"/>
+<link href="../src/css/standard.css" rel="stylesheet"/>
+<link href="../src/css/tealeaves.css" rel="stylesheet"/>
+
+<div style="padding: 100px">
+	<div id="chart"></div>
+	<div id="chart2"></div>
+</div>
+
+
+<script>
+slider = new Clizia.Graph.Rickshaw.Slider({element: "slider"})
+
+now = +new Date() / 1000
+
+
+function data(length, max, start) { 
+        max = max || 100
+        start = start || 0
+        var data = []
+        for (n = start ; n < start + length; n++) { 
+                data.push({x: n, y: Math.random() * max})
+        } 
+        return data
+} 
+
+metric = {title: "metric one", data: data(100)}
+
+
+tchart = new Clizia.Graph.Rickshaw.Tealeaves({ 
+	chart: "chart",
+	metric: metric,
+	})
+
+tchart2 = new Clizia.Graph.Rickshaw.Tealeaves({ 
+        chart: "chart2",
+        metric: metric,
+        })
+
+tchart.render()
+tchart2.render()
+</script>
