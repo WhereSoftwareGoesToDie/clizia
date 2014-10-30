@@ -42,8 +42,6 @@ Clizia.Graph.Rickshaw.Standard = function(args) {
 		extent = that.extents(data);
 		pextent = {min: extent[0] - that.padding, max: extent[1] + that.padding}
 		
-		
-
 		if (that.zeromin) { pextent.min = 0 }
 
 		graph.configure(pextent);
@@ -89,10 +87,8 @@ Clizia.Graph.Rickshaw.Standard = function(args) {
 		} 
 
 		that.zoomtoselected(that.base, that.start, that.stop);
+	} 
 
-
-} 
-
-return that;
+	return that;
 }
 

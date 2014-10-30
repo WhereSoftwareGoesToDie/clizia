@@ -45,18 +45,19 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 				feed = that.metric[i].feed 
 				$.getJSON(feed, function(data) { 
 					if (that.invalidData(data)) { 
-						err = data.error || "No data receieved"
+						err = data.error || "No data received"
 						that.state({state: "error", chart: that.chart, error: err})
-						that.metric_failed();
+						that.metric_failed()
 						throw err
 					} 
 					dataStore[i] = {data: data, name: d }
-					flagComplete();
+					flagComplete()
 				}) 
 			}
 		})
 			
 	}
+
 	completeCount = 0;
 	flagComplete = function(args) {
 		that.metric_complete()
@@ -65,7 +66,6 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 			completeRender()
 		} 
 	}
-		
 
 	completeRender = function() {
 
