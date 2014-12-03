@@ -86,8 +86,8 @@ Clizia.Graph.Rickshaw.Standard = function(args) {
 			that.slider.render({graphs: graph})
 		} 
 
-		that.zoomtoselected(that.base, that.start, that.stop);
-	} 
+		that.zoomtoselected(that.base || base , that.start || start, that.stop || stop);
+	}
 
 	return that;
 }
