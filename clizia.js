@@ -432,73 +432,73 @@ Clizia.Graph.Rickshaw = function (args) {
 	return that;	
 } 
 
-Clizia.Graph.Rickshaw.Stacked = function(args) { 
+Clizia.Graph.Rickshaw.Stacked = function(args) {
 	var that = Clizia.Graph.Rickshaw(args);
-	that.init = function(args) { 
-		if (!args.y2axis) { 
+	that.init = function(args) {
+		if (!args.y2axis) {
 			that.disabley2 = true; // TODO extend standard and stacked into one entity?
 		} else { that.y2axis = args.y2axis }
-		if (!args.legend) { 
+		if (!args.legend) {
 			that.disablelegend = true
 		} else { that.legend = args.legend }
 
 		//Stacked works in arrays
-		if (!is_array(that.metric)) { 
-			that.metric = [that.metric] 
+		if (!is_array(that.metric)) {
+			that.metric = [that.metric]
 		}
 		that.scalarPad = args.scalarPad || args.padding || 1;
-		if (args.renderer != "line" ) { that.scalarPad = 0 } 
+		if (args.renderer != "line" ) { that.scalarPad = 0 }
 
 		that.ratioPad  = args.ratioPad || 0.1;
 
-		that.right = args.right || [] 
+		that.right = args.right || []
 		that.right_links = args.right_links || []
 		that.left_links = args.left_links || []
 
 		if (that.right.length === that.metric.length) { that.hasLeft = false }
 		else { that.hasLeft = true; }
-		
-		if (that.right.length === 0) { that.hasRight = false } 
+
+		if (that.right.length === 0) { that.hasRight = false }
 		else { that.hasRight = true; }
 
 		that.stack = args.stack || "off";
 		that.renderer = args.renderer || "line";
-	
-	} 
 
-	isRight = function (m) { return that.right.indexOf(that.metric[m].id) >=  0 } 
-	isLeft = function (m) { return that.right.indexOf(that.metric[m].id) === -1 } 
-	
+	}
+
+	isRight = function (m) { return that.right.indexOf(that.metric[m].id) >=  0 }
+	isLeft = function (m) { return that.right.indexOf(that.metric[m].id) === -1 }
+
 	dataStore = []
-	
+
 	that.render = function(args) {
 		$.each(that.metric, function(i,d) {
-			if (d.data) { 
+			if (d.data) {
 				dataStore[i] = {data: d.data, name: d.title || d.id }; flagComplete()
-			} else { 
-				feed = that.metric[i].feed 
-				$.getJSON(feed, function(data) { 
-					if (that.invalidData(data)) { 
+			} else {
+				feed = that.metric[i].feed
+				$.getJSON(feed, function(data) {
+					if (that.invalidData(data)) {
 						err = data.error || "No data received"
 						that.state({state: "error", chart: that.chart, error: err})
 						that.metric_failed()
 						throw err
-					} 
+					}
 					dataStore[i] = {data: data, name: d }
 					flagComplete()
-				}) 
+				})
 			}
 		})
-			
+
 	}
 
 	completeCount = 0;
 	flagComplete = function(args) {
 		that.metric_complete()
 		completeCount += 1;
-		if (completeCount === that.metric.length) { 
+		if (completeCount === that.metric.length) {
 			completeRender()
-		} 
+		}
 	}
 
 	completeRender = function() {
@@ -506,44 +506,44 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 		right_range = [Number.MAX_VALUE, Number.MIN_VALUE];
 		left_range  = [Number.MAX_VALUE, Number.MIN_VALUE];
 
-		for (n = 0; n < dataStore.length; n++) { 
+		for (n = 0; n < dataStore.length; n++) {
 			extent = that.extents(dataStore[n].data)
-			if (isRight(n)) { 
-				right_range = [Math.min(extent[0], right_range[0]), 
+			if (isRight(n)) {
+				right_range = [Math.min(extent[0], right_range[0]),
 					       Math.max(extent[1], right_range[1])]
-			} else { 
-				left_range  = [Math.min(extent[0], left_range[0]), 
+			} else {
+				left_range  = [Math.min(extent[0], left_range[0]),
 					       Math.max(extent[1], left_range[1])]
 			}
-		}	
-	
-		if (that.hasRight) { 
-			right_range = [right_range[0] - that.scalarPad, right_range[1] + that.scalarPad] 
+		}
+
+		if (that.hasRight) {
+			right_range = [right_range[0] - that.scalarPad, right_range[1] + that.scalarPad]
 			right_scale = d3.scale.linear().domain(right_range);
 		}
 
-		if (that.hasLeft)  { 
-			left_range  = [left_range[0]  - that.scalarPad, left_range[1]  + that.scalarPad] 
+		if (that.hasLeft)  {
+			left_range  = [left_range[0]  - that.scalarPad, left_range[1]  + that.scalarPad]
 			left_scale = d3.scale.linear().domain(left_range);
 		}
 
 		series = [];
-		for (n = 0; n < dataStore.length; n++) { 
+		for (n = 0; n < dataStore.length; n++) {
 			scale = isRight(n) ? right_scale : left_scale
-			
-			series.push({ 
+
+			series.push({
 				data: dataStore[n].data,
 				name: dataStore[n].name,
-				color: that.metric[n].color, 
+				color: that.metric[n].color,
 				scale: scale
 			})
 		}
-	
+
 		config = {}
 		config.renderer = that.renderer;
 		config.stack = that.stack;
 		config.interpolate = "monotone";
-			
+
 		if (that.hasRight && that.hasLeft ) {
 			d = [Math.min(left_scale.domain()[0], right_scale.domain()[0]),
 			Math.max(left_scale.domain()[1], right_scale.domain()[1])]
@@ -553,7 +553,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 			d = left_scale.domain()
 		}
 
-		
+
 		//Ratio Padding - defaults from rickshaw.js
 		padY = 0.02
 		padX = 0
@@ -569,8 +569,8 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 
 		graph = new Rickshaw.Graph({
 			element: document.getElementById(that.graph),
-			width: that.width, 
-			height: that.height, 
+			width: that.width,
+			height: that.height,
 			series: series
 		})
 
@@ -578,7 +578,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 
 		that.graph = graph;
 
-		if (that.hasLeft) { 
+		if (that.hasLeft) {
 			left_axis = new Rickshaw.Graph.Axis.Y.Scaled({
 				element: document.getElementById(that.yaxis),
 				graph: graph,
@@ -588,7 +588,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 			});
 		}
 
-		if (that.hasRight) { 
+		if (that.hasRight) {
 			right_axis = new Rickshaw.Graph.Axis.Y.Scaled({
 				element: document.getElementById(that.y2axis),
 				graph: graph,
@@ -611,13 +611,13 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 		graph.render();
 
 		// Make stacks easier to see by adding an alpha transperancy to both
-		// the graph and the legend 
+		// the graph and the legend
 		if (that.stack === false && (that.renderer == "area")) {
 			$(document.head).append("<style>path.area{opacity:0.8};.legend-color{opacity:0.8}</style>");
 		}
 
 		// X-axis slider for zooming
-		if (that.slider) { 
+		if (that.slider) {
 			that.slider.render({graphs: graph, onchange: that.generateLegend})
 		}
 
@@ -633,31 +633,31 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 				return new Date(x * 1000).toString();
 			}
 		} );
-	
-		that.generateLegend()	
-		that.zoomtoselected(that.base, that.start, that.stop);	
+
+		that.generateLegend()
+		that.zoomtoselected(that.base || base , that.start || start, that.stop || stop);
 		that.state({state: "complete"})
 	}
 
 	that.generateLegend = function() {
-		if (that.legend) { 
-		
+		if (that.legend) {
+
 		var legend = document.getElementById(that.legend);
 
-		function median(a) { 
+		function median(a) {
 			a.sort(function(a,b){return a - b});
 			h = Math.floor(a.length/2)
 			if (a.length % 2) { n = a[h]; m = n }
 			else { n = a[h-1]; m = a[h] }
-			return (n + m) / 2.0 
-		} 
+			return (n + m) / 2.0
+		}
 
-		function arr_f(a) { 
+		function arr_f(a) {
 			r = {avg: 0, median: 0, min: 0, max: 0, std: 0};
 			t = a.length;
 			r.max = Math.max.apply(Math, a);
 			r.min = Math.min.apply(Math, a);
-			r.median = median(a); 	
+			r.median = median(a);
 			for(var m, s = 0, l = t; l--; s += a[l]);
 			for(m = r.mean = s / t, l = t, s = 0; l--; s += Math.pow(a[l] - m, 2));
 			return r.deviation = Math.sqrt(r.variance = s / t), r;
@@ -679,7 +679,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 		left = [];
 		right = [];
 
-		for (var i = 0; i < that.graph.series.length; i++) { 
+		for (var i = 0; i < that.graph.series.length; i++) {
 			d = that.graph.series[i];
 			obj = {};
 			obj.metric = that.metric[i].title || that.metric[i].id;
@@ -721,7 +721,7 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 		}
 
 
-		function tableize(e) { //arr.forEach(function(d) { 
+		function tableize(e) { //arr.forEach(function(d) {
 			var t = [];
 			t.push("<tr>");
 
@@ -786,61 +786,61 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 		});
 
 		}
-	} 
+	}
 
-	
+
 	that.init(args);
 	return that;
-} 
-Clizia.Graph.Rickshaw.Standard = function(args) { 
+}
+Clizia.Graph.Rickshaw.Standard = function(args) {
 	var that = Clizia.Graph.Rickshaw(args);
 
-	that.render = function(args) { 
+	that.render = function(args) {
 		if (that.showurl) {
 			Clizia.Utils.showURL(that.showurl, that.metric.sourceURL);
-		} 
+		}
 
-		if (that.removeurl) { 
+		if (that.removeurl) {
 			Clizia.Utils.removeURL(that.removeurl, that.metric.removeURL);
 		}
-		
-		if (that.metric.feed) { 
- 
-			$.getJSON(that.metric.feed, function(data) { 
-				if (that.invalidData(data)) { 
-					err = data.error ||  errorMessage.noData	
+
+		if (that.metric.feed) {
+
+			$.getJSON(that.metric.feed, function(data) {
+				if (that.invalidData(data)) {
+					err = data.error ||  errorMessage.noData
 					that.state({state: "error", element: that.chart, error: err, removeURL: that.metric.removeURL})
 					if (that.slider) { that.slider.failed({graph: that.metric.id}) }
 					that.metric_complete();
 					throw "Error retrieving data: "+err
 				}
-				
+
 				that.process(data)
 
 			})
-		} else if (that.metric.data) { 
+		} else if (that.metric.data) {
 			that.process(that.metric.data)
 		}
 	}
-		
-	that.process = function(data) { 
+
+	that.process = function(data) {
 		graph = new Rickshaw.Graph({
 			element: document.getElementById(that.graph),
-			width: that.width, 
+			width: that.width,
 			height: that.height,
-			renderer: 'line', 
+			renderer: 'line',
 			series: [{ data: data, color: that.metric.color }]
 		});
-		
+
 		that.graph = graph;
 		extent = that.extents(data);
 		pextent = {min: extent[0] - that.padding, max: extent[1] + that.padding}
-		
+
 		if (that.zeromin) { pextent.min = 0 }
 
 		graph.configure(pextent);
 
-		if (that.metric.counter)  { 
+		if (that.metric.counter)  {
 			graph.configure({interpolation: 'step'});
 		}
 
@@ -860,28 +860,28 @@ Clizia.Graph.Rickshaw.Standard = function(args) {
 
 		that.dynamicWidth();
 		graph.render();
-		
+
 		new Rickshaw.Graph.HoverDetail({
 			graph: graph,
 			formatter: function (series, x, y) {
-				content = "<span class='date'>" + 
+				content = "<span class='date'>" +
 					  that.d3_time(x) +
-					  "</span><br/>" + 
+					  "</span><br/>" +
 					  that.format(y);
 				return content;
 			}
 		});
 
-		graph.render();	
+		graph.render();
 		that.state({state: "complete"})
-		that.metric_complete(); 
+		that.metric_complete();
 
 		if (that.slider) {
 			that.slider.render({graphs: graph})
-		} 
+		}
 
-		that.zoomtoselected(that.base, that.start, that.stop);
-	} 
+		that.zoomtoselected(that.base || base , that.start || start, that.stop || stop);
+	}
 
 	return that;
 }

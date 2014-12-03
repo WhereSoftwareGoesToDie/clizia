@@ -1,7 +1,7 @@
-Clizia.Graph.Horizon = function(args) { 
+Clizia.Graph.Horizon = function(args) {
 	var that = Clizia.Graph(args)
 
-	that.init = function(args) { 
+	that.init = function(args) {
 		if (!args.start) throw "Clizia.Graph.Horizon needs a start time"
 		that.start = args.start
 
@@ -25,7 +25,7 @@ Clizia.Graph.Horizon = function(args) {
 			.step(that.step*1000) //1e3)
 			.size(that.width)
 			.stop();
-		that.context = context;	
+		that.context = context;
 	}
 
 	that.render = function() {
@@ -36,7 +36,7 @@ Clizia.Graph.Horizon = function(args) {
 		datum = [];
 
 		machiavelli = context.machiavelli(window.location.origin);
-		for (n = 0; n < that.metric.length; n++ ) { 
+		for (n = 0; n < that.metric.length; n++ ) {
 			m = that.metric[n]
 			id = m.id;
 			title = m.title || m.id
@@ -56,7 +56,7 @@ Clizia.Graph.Horizon = function(args) {
 					context.horizon()
 					.height(50)
 					.colors(that.color)
-				); 
+				);
 
 			div.append("div")
 				.attr("class", "rule")
@@ -65,9 +65,9 @@ Clizia.Graph.Horizon = function(args) {
 		// On mousemove, reposition the chart values to match the rule.
 		context.on("focus", function(i) {
 			d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
-		});	
-	} 
+		});
+	}
 
 	that.init(args)
 	return that
-} 
+}

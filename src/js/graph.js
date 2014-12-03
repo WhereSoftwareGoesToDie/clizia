@@ -15,21 +15,21 @@ Clizia.Graph = function(args) {
         that.update = function(args) { throw "Cannot invoke parent Clizia.Graph.update() directly." }
 
 
-	next_color = function() {  
+	next_color = function() {
 		if (typeof clizia_palette === "undefined") {
 			clizia_palette = new Rickshaw.Color.Palette({scheme: "munin"})
 		}
 		return clizia_palette.color()
-	} 
+	}
 
-	that.state = function(args) {          
+	that.state = function(args) {
 		if (typeof args === "String" ) { args = {state: args} }
 
 		function rmv_wait() { graph.find(".waiting").remove() }
 
-		if (args.state) { 
+		if (args.state) {
 			var graph = $("#"+that.chart)
-			if (args.state === "waiting") { 
+			if (args.state === "waiting") {
 				graph.append("<div class='waiting'><i class='icon-spin'></i></div>")
 			} else if (args.state === "error") {
 				rmv_wait()
@@ -37,11 +37,11 @@ Clizia.Graph = function(args) {
 				error = args.error;
 				url = args.removeURL || ""
 				detail = args.detail || ""
-			
+
 				error = stripHTML(error);
 				error_alert = "<div class='alert alert-danger'>" + error;
 
-				if (url) { 
+				if (url) {
 					error_alert +=  ". <a class='alert-link' href='"+url+"'>Remove graph</a>.";
 				}
 
@@ -55,26 +55,26 @@ Clizia.Graph = function(args) {
 				graph.append(error_alert)
 
 				graph.addClass("error")
-			} else if (args.state === "complete") { 
+			} else if (args.state === "complete") {
 				rmv_wait()
-			} 
-		} else { 
+			}
+		} else {
 			throw "No state"
 		}
-	}	
+	}
 	function stripHTML(e) {  return e.replace(/<(?:.|\n)*?>/gm, '').replace(/(\r\n|\n|\r)/gm,""); }
 
 	that.metric_complete = function() {
 		if (typeof nanobar === "object") {
 			nanobar.inc()
-		} 
-	} 
+		}
+	}
 
-	that.metric_failed = function() { 
+	that.metric_failed = function() {
 		if (typeof nanobar === "object") {
 			nanobar.complete()
-		} 
-	} 
+		}
+	}
 
 	that.init(args);
 	return that;
