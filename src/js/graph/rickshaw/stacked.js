@@ -199,9 +199,9 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 				return new Date(x * 1000).toString();
 			}
 		} );
-	
-		that.generateLegend()	
-		that.zoomtoselected(that.base, that.start, that.stop);	
+
+		that.generateLegend()
+		that.zoomtoselected(that.base || base , that.start || start, that.stop || stop);
 		that.state({state: "complete"})
 	}
 
