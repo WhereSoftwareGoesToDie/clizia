@@ -17,48 +17,48 @@ var is_array = function (value) {
 
 var nanobar;
 
-/** 
-A nanobar.js object 
+/**
+A nanobar.js object
 @param args.count - the expected number of events to be returned before the page is "complete"
 */
-Clizia.Nanobar = function(args) { 
+Clizia.Nanobar = function(args) {
 	if (typeof Nanobar !== "function") {
 	       	throw "Clizia.Nanobar requires Nanobar.js";
 	}
 	var that = {};
-	var complete = 0; 
-	that.init = function(args) { 
-		if (!args.count) { 
-			throw "Cannot create progress without a count of expected items"; 
+	var complete = 0;
+	that.init = function(args) {
+		if (!args.count) {
+			throw "Cannot create progress without a count of expected items";
 		}
 		that.count = args.count;
 		that.nanobar = new Nanobar({bg: "#356895" ,id:"#progress"})
-	}; 
+	};
 
-	that.inc = function() { 
-		complete = complete + 1; 
+	that.inc = function() {
+		complete = complete + 1;
 		var len = (complete / that.count) * 100;
-		if (len < 100) { 
-			that.nanobar.go(len); 
-		} 
-		else { 
+		if (len < 100) {
+			that.nanobar.go(len);
+		}
+		else {
 			that.nanobar.go(100);
-		} 
-	}; 
-	
+		}
+	};
+
 	// Force the completion of the nanobar progress (e.g. unrecoverable error)
-	that.complete = function() { 
+	that.complete = function() {
 		that.nanobar.go(100);
 	}
 
 	that.init(args);
 
-	return that; 
-}; 
+	return that;
+};
 
 var clizia_utils_unique_id_seed = 0;
 Clizia.Utils = {
-	showURL: function(element, url) { 
+	showURL: function(element, url) {
 		var show = "<span class='data_source'><a href='"+
 			url+
 			"' target=_blank><i title='Open external data source' "+
@@ -71,19 +71,19 @@ Clizia.Utils = {
 			"'><i title='Remove graph' class='icon-remove'></i></a></span>";
 		document.getElementById(element).innerHTML = rm;
 	},
-	ProgressBar: function(a) { 
+	ProgressBar: function(a) {
 		nanobar = Clizia.Nanobar({count: a});
 	},
 
-	uniq_id: function(a) { 
+	uniq_id: function(a) {
 		//unique, not a GUID, but unique enough
-		if (typeof a === "undefined") { 
-			div_name = "id_" 
-		} else { 
-			div_name = a + "_" 
+		if (typeof a === "undefined") {
+			div_name = "id_"
+		} else {
+			div_name = a + "_"
 		}
-		return div_name + (++clizia_utils_unique_id_seed) 
-	} 
+		return div_name + (++clizia_utils_unique_id_seed)
+	}
 
 };
 Clizia.Graph = function(args) {
@@ -103,21 +103,21 @@ Clizia.Graph = function(args) {
         that.update = function(args) { throw "Cannot invoke parent Clizia.Graph.update() directly." }
 
 
-	next_color = function() {  
+	next_color = function() {
 		if (typeof clizia_palette === "undefined") {
 			clizia_palette = new Rickshaw.Color.Palette({scheme: "munin"})
 		}
 		return clizia_palette.color()
-	} 
+	}
 
-	that.state = function(args) {          
+	that.state = function(args) {
 		if (typeof args === "String" ) { args = {state: args} }
 
 		function rmv_wait() { graph.find(".waiting").remove() }
 
-		if (args.state) { 
+		if (args.state) {
 			var graph = $("#"+that.chart)
-			if (args.state === "waiting") { 
+			if (args.state === "waiting") {
 				graph.append("<div class='waiting'><i class='icon-spin'></i></div>")
 			} else if (args.state === "error") {
 				rmv_wait()
@@ -125,11 +125,11 @@ Clizia.Graph = function(args) {
 				error = args.error;
 				url = args.removeURL || ""
 				detail = args.detail || ""
-			
+
 				error = stripHTML(error);
 				error_alert = "<div class='alert alert-danger'>" + error;
 
-				if (url) { 
+				if (url) {
 					error_alert +=  ". <a class='alert-link' href='"+url+"'>Remove graph</a>.";
 				}
 
@@ -143,35 +143,35 @@ Clizia.Graph = function(args) {
 				graph.append(error_alert)
 
 				graph.addClass("error")
-			} else if (args.state === "complete") { 
+			} else if (args.state === "complete") {
 				rmv_wait()
-			} 
-		} else { 
+			}
+		} else {
 			throw "No state"
 		}
-	}	
+	}
 	function stripHTML(e) {  return e.replace(/<(?:.|\n)*?>/gm, '').replace(/(\r\n|\n|\r)/gm,""); }
 
 	that.metric_complete = function() {
 		if (typeof nanobar === "object") {
 			nanobar.inc()
-		} 
-	} 
+		}
+	}
 
-	that.metric_failed = function() { 
+	that.metric_failed = function() {
 		if (typeof nanobar === "object") {
 			nanobar.complete()
-		} 
-	} 
+		}
+	}
 
 	that.init(args);
 	return that;
 }
 
-Clizia.Graph.Horizon = function(args) { 
+Clizia.Graph.Horizon = function(args) {
 	var that = Clizia.Graph(args)
 
-	that.init = function(args) { 
+	that.init = function(args) {
 		if (!args.start) throw "Clizia.Graph.Horizon needs a start time"
 		that.start = args.start
 
@@ -195,7 +195,7 @@ Clizia.Graph.Horizon = function(args) {
 			.step(that.step*1000) //1e3)
 			.size(that.width)
 			.stop();
-		that.context = context;	
+		that.context = context;
 	}
 
 	that.render = function() {
@@ -206,7 +206,7 @@ Clizia.Graph.Horizon = function(args) {
 		datum = [];
 
 		machiavelli = context.machiavelli(window.location.origin);
-		for (n = 0; n < that.metric.length; n++ ) { 
+		for (n = 0; n < that.metric.length; n++ ) {
 			m = that.metric[n]
 			id = m.id;
 			title = m.title || m.id
@@ -226,7 +226,7 @@ Clizia.Graph.Horizon = function(args) {
 					context.horizon()
 					.height(50)
 					.colors(that.color)
-				); 
+				);
 
 			div.append("div")
 				.attr("class", "rule")
@@ -235,12 +235,12 @@ Clizia.Graph.Horizon = function(args) {
 		// On mousemove, reposition the chart values to match the rule.
 		context.on("focus", function(i) {
 			d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
-		});	
-	} 
+		});
+	}
 
 	that.init(args)
 	return that
-} 
+}
 Clizia.Graph.Rickshaw = function (args) { 
 	if (typeof Rickshaw !== "object") throw "Clizia.Graph.Rickshaw requires Rickshaw.Graph"
 
@@ -567,12 +567,17 @@ Clizia.Graph.Rickshaw.Stacked = function(args) {
 		config.padding = padArray
 
 
-		graph = new Rickshaw.Graph({
-			element: document.getElementById(that.graph),
-			width: that.width,
-			height: that.height,
-			series: series
-		})
+		try {
+			graph = new Rickshaw.Graph({
+				element: document.getElementById(that.graph),
+				width: that.width,
+				height: that.height,
+				series: series
+			})
+		} catch (e) {
+			that.state({state: "error", element: that.chart, error: e, removeURL: that.metric.removeURL})
+			return
+		}
 
 		graph.configure(config);
 
