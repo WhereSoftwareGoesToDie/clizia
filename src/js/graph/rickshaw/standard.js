@@ -2,20 +2,13 @@ Clizia.Graph.Rickshaw.Standard = function(args) {
 	var that = Clizia.Graph.Rickshaw(args);
 
 	that.render = function(args) {
-		if (that.showurl) {
-			Clizia.Utils.showURL(that.showurl, that.metric.sourceURL);
-		}
-
-		if (that.removeurl) {
-			Clizia.Utils.removeURL(that.removeurl, that.metric.removeURL);
-		}
 
 		if (that.metric.feed) {
 
 			$.getJSON(that.metric.feed, function(data) {
 				if (that.invalidData(data)) {
 					err = data.error ||  errorMessage.noData
-					that.state({state: "error", element: that.chart, error: err, removeURL: that.metric.removeURL})
+					that.state({state: "error", element: that.chart, error: err, removeURL: that.metric.removeURL, showURL: that.metric.sourceURL})
 					if (that.slider) { that.slider.failed({graph: that.metric.id}) }
 					that.metric_complete();
 					throw "Error retrieving data: "+err
@@ -30,6 +23,13 @@ Clizia.Graph.Rickshaw.Standard = function(args) {
 	}
 
 	that.process = function(data) {
+		if (that.showurl) {
+			Clizia.Utils.showURL(that.showurl, that.metric.sourceURL);
+		}
+
+		if (that.removeurl) {
+			Clizia.Utils.removeURL(that.removeurl, that.metric.removeURL);
+		}
 		graph = new Rickshaw.Graph({
 			element: document.getElementById(that.graph),
 			width: that.width,
