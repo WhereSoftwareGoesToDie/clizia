@@ -35,14 +35,19 @@ Clizia.Graph = function(args) {
 				rmv_wait()
 
 				error = args.error;
-				url = args.removeURL || ""
+				removeURL = args.removeURL || ""
+				showURL = args.showURL || ""
 				detail = args.detail || ""
 
 				error = stripHTML(error);
 				error_alert = "<div class='alert alert-danger'>" + error;
 
-				if (url) {
-					error_alert +=  ". <a class='alert-link' href='"+url+"'>Remove graph</a>.";
+				if (showURL) {
+					error_alert +=  ". <a class='alert-link' href='"+showURL+"' target='_blank'>Check source</a>";
+				}
+
+				if (removeURL) {
+					error_alert +=  ". <a class='alert-link' href='"+removeURL+"'>Remove graph</a>.";
 				}
 
 				if (detail) {
